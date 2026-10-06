@@ -1,172 +1,24 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Simon Game – Keyboard Version</title>
-<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet" />
-<style>
-  body {
-    text-align: center;
-    background-color: #011F3F;
-    font-family: 'Press Start 2P', cursive;
-    margin: 0; padding: 0;
-    color: #FEF2BF;
-  }
+  <head>
+    <meta charset="UTF-8" />
+    <title>Simon Game – Keyboard Version</title>
+    <!-- <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet" /> -->
+    <link href="game.css" rel="stylesheet" />
+  </head>
 
-  #level-title {
-    margin: 30px 0;
-    font-size: 2rem;
-  }
+  <body>
+    <h1 id="level-title">Press Any Key to Start</h1>
 
-  .container {
-    width: 800px;
-    margin: auto;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-  }
+    <div class="container">
+      <div id="green" class="btn green"></div>
+      <div id="red" class="btn red"></div>
+      <div id="yellow" class="btn yellow"></div>
+      <div id="blue" class="btn blue"></div>
+    </div>
 
-  .btn {
-    width: 180px;
-    height: 180px;
-    border-radius: 20%;
-    border: 10px solid black;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-  }
+    <footer>Made with ❤️ by Anuj Dubey</footer>
 
-  .green { background-color: green; }
-  .red { background-color: red; }
-  .yellow { background-color: yellow; }
-  .blue { background-color: blue; }
-
-  .pressed {
-    opacity: 0.5;
-    box-shadow: 0 0 20px white;
-  }
-
-  .game-over {
-    background-color: red !important;
-  }
-
-  footer {
-    margin-top: 40px;
-  }
-</style>
-</head>
-
-<body>
-
-<h1 id="level-title">Press Any Key to Start</h1>
-
-<div class="container">
-  <div id="green" class="btn green"></div>
-  <div id="red" class="btn red"></div>
-  <div id="yellow" class="btn yellow"></div>
-  <div id="blue" class="btn blue"></div>
-</div>
-
-<footer>Made with ❤️ by Anuj Dubey</footer>
-
-<script>
-  // KEY MAP
-  const keyMap = {
-    "1": "green",
-    "2": "red",
-    "3": "yellow",
-    "4": "blue"
-  };
-
-  let buttonColors = ["green", "red", "yellow", "blue"];
-  let gamePattern = [];
-  let userClickedPattern = [];
-  let started = false;
-  let level = 0;
-
-  // START GAME
-  document.addEventListener("keypress", function() {
-    if (!started) {
-      nextSequence();
-      started = true;
-    }
-  });
-
-  // USER KEY PRESS INPUT
-  document.addEventListener("keydown", function(event) {
-    let key = event.key;
-
-    if (keyMap[key]) {
-      let userColor = keyMap[key];
-      userClickedPattern.push(userColor);
-
-      animatePress(userColor);
-      playSound(userColor);
-      checkAnswer(userClickedPattern.length - 1);
-    }
-  });
-
-  // CHECK ANSWER
-  function checkAnswer(currentLevel) {
-    if (gamePattern[currentLevel] === userClickedPattern[currentLevel]) {
-      if (userClickedPattern.length === gamePattern.length) {
-        setTimeout(nextSequence, 1000);
-      }
-    } else {
-      playSound("wrong");
-      document.body.classList.add("game-over");
-      document.getElementById("level-title").textContent = "Game Over! Press Any Key to Restart";
-
-      setTimeout(() => {
-        document.body.classList.remove("game-over");
-      }, 200);
-
-      startOver();
-    }
-  }
-
-  // NEXT SEQUENCE
-  function nextSequence() {
-    userClickedPattern = [];
-    level++;
-    document.getElementById("level-title").textContent = "Level " + level;
-
-    let randomNumber = Math.floor(Math.random() * 4);
-    let randomChosenColor = buttonColors[randomNumber];
-    gamePattern.push(randomChosenColor);
-
-    let button = document.getElementById(randomChosenColor);
-    button.style.opacity = "0.3";
-
-    setTimeout(() => {
-      button.style.opacity = "1";
-    }, 200);
-
-    playSound(randomChosenColor);
-  }
-
-  // SOUND
-  function playSound(name) {
-    let audio = new Audio("sounds/" + name + ".mp3");
-    audio.play();
-  }
-
-  // ANIMATION
-  function animatePress(color) {
-    let activeButton = document.getElementById(color);
-    activeButton.classList.add("pressed");
-
-    setTimeout(() => {
-      activeButton.classList.remove("pressed");
-    }, 200);
-  }
-
-  // RESET
-  function startOver() {
-    level = 0;
-    gamePattern = [];
-    started = false;
-  }
-</script>
-
-</body>
+    <script src="game.js"></script>
+  </body>
 </html>
